@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const HttpError = require("./models/http-error");
 
@@ -27,8 +28,17 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "Unknown error occurred" });
 });
 
-app.listen(port, () => {
-  console.log(`App is running on port ${port}`);
-  console.log(`App is running on port ${port}`);
-  console.log(`App is running on port ${port}`);
-});
+mongoose
+  .connect(
+    "mongodb+srv://sayantan:Gonipur%401@cluster0.mc12jqb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  )
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`App is running on port ${port}`);
+      console.log(`App is running on port ${port}`);
+      console.log(`App is running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.log("Server error", error);
+  });
