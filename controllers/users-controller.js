@@ -4,14 +4,6 @@ const httpError = require("../models/http-error");
 
 const User = require("../models/user");
 
-const DUMMY_USERS = [
-  {
-    userName: "Sayantan",
-    email: "sayantanchakravarty83@gmail.com",
-    password: "testpassword",
-  },
-];
-
 const getAllUser = async (req, res, next) => {
   let users;
   try {
@@ -35,7 +27,7 @@ const signUp = async (req, res, next) => {
     );
     return next(error);
   }
-  const { userName, email, password, places } = req.body;
+  const { userName, email, password } = req.body;
 
   let existingUser;
   try {
@@ -58,7 +50,7 @@ const signUp = async (req, res, next) => {
     password: password,
     image:
       "https://images.unsplash.com/photo-1473830394358-91588751b241?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    places: places,
+    places: [],
   });
 
   try {

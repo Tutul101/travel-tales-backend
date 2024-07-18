@@ -1,36 +1,9 @@
 const { v4: uuidv4 } = require("uuid");
+const mongoose = require("mongoose");
 const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-error");
 const Place = require("../models/place");
-
-let DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Empire State Building",
-    description: "One of the most famous sky scrapers in the world",
-    imageUrl:
-      "https://media.istockphoto.com/id/486334510/photo/new-york-city-skyline.jpg?s=1024x1024&w=is&k=20&c=2XpMl1tWgCAAQ55ZI4PcMYr1CQTIs7JMkpfDzJSRJiE=",
-    address: "20 W 34th St., New York, NY 10001, USA",
-    location: {
-      lat: "40.7484445",
-      lng: "-73.9882393",
-    },
-    creator: "u1",
-  },
-  {
-    id: "p2",
-    title: "Empire State Building",
-    description: "One of the most famous sky scrapers in the world",
-    imageUrl:
-      "https://media.istockphoto.com/id/486334510/photo/new-york-city-skyline.jpg?s=1024x1024&w=is&k=20&c=2XpMl1tWgCAAQ55ZI4PcMYr1CQTIs7JMkpfDzJSRJiE=",
-    address: "20 W 34th St., New York, NY 10001, USA",
-    location: {
-      lat: "40.7484445",
-      lng: "-73.9882393",
-    },
-    creator: "u2",
-  },
-];
+const User = require("../models/user");
 
 const getPlaceByid = async (req, res, next) => {
   const placeId = req.params.placeId;
@@ -102,8 +75,24 @@ const createPlace = async (req, res, next) => {
     location: coordinates,
     creator: creator,
   });
+
+  let user;
+
   try {
-    await createdPlace.save();
+    user = await User.findById(creator);
+  } catch (err) {
+    const error = new HttpError("Could not find places for provided id", 500);
+    return next(error);
+  }
+  console.log(user);
+
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    await createdPlace.save({ session: session });
+    user.places.push(createdPlace);
+    await user.save({ session: session });
+    session.commitTransaction();
   } catch (err) {
     const error = new HttpError("Creating place failed, Please try again", 500);
     console.log(err);
