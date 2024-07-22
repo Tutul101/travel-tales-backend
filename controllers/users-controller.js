@@ -78,7 +78,7 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  if (!existingUser || existingUser.password === "password") {
+  if (!existingUser || existingUser.password !== passwprd) {
     const error = new httpError("Invalid credentials", 401);
     return next(error);
   }
