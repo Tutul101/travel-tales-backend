@@ -28,8 +28,9 @@ const signUp = async (req, res, next) => {
     return next(error);
   }
   const { userName, email, password } = req.body;
-
+  const imagePath = req.file.path;
   let existingUser;
+
   try {
     existingUser = await User.findOne({ email: email });
   } catch (err) {
@@ -48,8 +49,7 @@ const signUp = async (req, res, next) => {
     name: userName,
     email: email,
     password: password,
-    image:
-      "https://images.unsplash.com/photo-1473830394358-91588751b241?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: imagePath,
     places: [],
   });
 
