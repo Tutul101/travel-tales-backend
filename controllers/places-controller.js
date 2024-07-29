@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 const mongoose = require("mongoose");
 const { validationResult } = require("express-validator");
@@ -166,6 +167,11 @@ const deletePlace = async (req, res, next) => {
     console.log("Error while finding the place", err);
     return next(error);
   }
+  const imagePath = place.image;
+  fs.unlink(imagePath, (err) => {
+    console.log("Error while deleting the image", imagePath);
+  });
+
   res.status(200).json({ message: "Place deleted Successfully" });
 };
 exports.getPlaceByid = getPlaceByid;
