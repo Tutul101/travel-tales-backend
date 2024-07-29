@@ -60,17 +60,17 @@ const createPlace = async (req, res, next) => {
     return next(error);
   }
   const { title, description, address, creator } = req.body;
+  const imagePath = req.file.path;
   const coordinates = {
     lat: "40.7484445",
     lng: "-73.9882393",
   };
   console.log("Post request body", req.body);
-
+  console.log("image path", imagePath);
   const createdPlace = new Place({
     title: title,
     description: description,
-    image:
-      "https://images.unsplash.com/photo-1517713982677-4b66332f98de?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: imagePath,
     address: address,
     location: coordinates,
     creator: creator,
