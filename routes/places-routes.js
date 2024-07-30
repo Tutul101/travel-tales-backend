@@ -11,11 +11,15 @@ const {
 
 const fileUpload = require("../middleware/file-upload");
 
+const checkAuth = require("../middleware/check-auth");
+
 const router = express.Router();
 
 router.get("/:placeId", getPlaceByid);
 
 router.get("/user/:userId", getPlaceByUserid);
+
+router.use(checkAuth);
 
 router.post(
   "/",
