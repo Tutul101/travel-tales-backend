@@ -157,7 +157,7 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
   if (place.creator !== req.userData.userId) {
-    const error = new HttpErrpr("You are not allowed to update this");
+    const error = new HttpError("You are not allowed to update this");
     return next(error);
   }
   console.log("place", place);
