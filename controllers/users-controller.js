@@ -105,7 +105,7 @@ const login = async (req, res, next) => {
 
   let isValidPassword;
   try {
-    isValidPassword = bcrypt.compare(password, existingUser.password);
+    isValidPassword = await bcrypt.compare(password, existingUser.password);
   } catch (err) {
     const error = new httpError(
       "Could not log you in please check your credentials",
@@ -120,16 +120,24 @@ const login = async (req, res, next) => {
   }
   let token;
   try {
-    token = await jwt(
+    token = await jwt.sign(
       { userId: existingUser._id, email: existingUser.email },
       jwt_private_key,
       { expiresIn: "1h" }
     );
-  } catch (err) {}
-  res.status(200).json({
-    message: "Login successfull",
-    user: { userId: existingUser._id, email: existingUser.email, token: token },
-  });
+    res.status(200).json({
+      message: "Login successfull",
+      user: {
+        userId: existingUser._id,
+        email: existingUser.email,
+        token: token,
+      },
+    });
+  } catch (err) {
+    const error = new httpError("Invalid credentials", 401);
+    console.log("err", err);
+    return next(error);
+  }
 };
 
 exports.getAllUser = getAllUser;
