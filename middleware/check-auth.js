@@ -16,7 +16,7 @@ const checkAuth = (req, res, next) => {
       throw new Error("Authorization failed");
     }
     const decodedToken = jwt.verify(token, jwt_private_key);
-    req.userData = { userId: decodedToken };
+    req.userData = { userId: decodedToken.userId };
     next();
   } catch (err) {
     const error = new HttpError("Authorization failed", 500);

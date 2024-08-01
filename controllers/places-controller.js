@@ -122,6 +122,11 @@ const updataPlace = async (req, res, next) => {
     const error = new HttpError("Some thing went wrong could not update", 500);
     return next(error);
   }
+
+  if (place.creator.toString() !== req.userData.userId) {
+    const error = new HttpErrpr("You are not allowed to update this");
+    return next(error);
+  }
   place.title = title;
   place.description = description;
 
@@ -149,6 +154,10 @@ const deletePlace = async (req, res, next) => {
   }
   if (!place) {
     const error = new HttpError("Could not find place for this id", 404);
+    return next(error);
+  }
+  if (place.creator !== req.userData.userId) {
+    const error = new HttpErrpr("You are not allowed to update this");
     return next(error);
   }
   console.log("place", place);
