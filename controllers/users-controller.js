@@ -7,7 +7,7 @@ const httpError = require("../models/http-error");
 
 const User = require("../models/user");
 
-const jwt_private_key = "secret_tutul_private_key_do_not_share_it";
+const jwt_private_key = process.env.JWT_KEY;
 
 const getAllUser = async (req, res, next) => {
   let users;

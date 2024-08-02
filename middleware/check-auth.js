@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/http-error");
 
-const jwt_private_key = "secret_tutul_private_key_do_not_share_it";
+const jwt_private_key = process.env.JWT_KEY;
 
 const checkAuth = (req, res, next) => {
   if (req.method === "OPTIONS") {

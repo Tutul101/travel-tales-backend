@@ -1,0 +1,7 @@
+{
+  "env": {
+    "DB_USER": "sayantan",
+    "DB_PASSWORD": "Gonipur%401",
+    "JWT_KEY": "secret_tutul_private_key_do_not_share_it"
+  }
+}
